@@ -196,14 +196,13 @@ h2{font-family:var(--serif); font-weight:600; font-size:42px; letter-spacing:-0.
 /* ============================================================
    THE GAMES
    ============================================================ */
-.game-row{display:flex; flex-wrap:wrap; perspective:1200px;}
+.game-row{display:flex; flex-wrap:wrap;}
 .game-card{
   flex:1 1 45%; min-width:280px; background:var(--black-card); border:1px solid var(--line);
   padding:36px; margin-right:24px; margin-bottom:24px; position:relative;
-  transform:rotateX(0) rotateY(0); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  will-change:transform;
+  transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
-.game-card:hover{border-color:var(--gold-dim); box-shadow:0 24px 48px rgba(0,0,0,.35);}
+.game-card:hover{border-color:var(--gold-dim); box-shadow:0 16px 32px rgba(0,0,0,.3); transform:translateY(-2px);}
 @media (prefers-reduced-motion: reduce){
   .game-card{transition:none;}
 }
@@ -213,7 +212,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:42px; letter-spacing:-0.
 .game-icon{width:26px; height:26px; color:var(--gold-bright); opacity:.9; flex-shrink:0;}
 .game-card h3{font-family:var(--serif); font-size:26px; font-weight:600; margin-bottom:12px;}
 .game-card p{color:var(--paper-dim); font-size:15px; line-height:1.75;}
-.game-tests{margin-top:20px; padding-top:20px; border-top:1px dashed var(--line);}
+.game-tests{margin-top:20px; padding-top:20px; border-top:1px solid var(--line);}
 .game-tests-label{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--paper-faint); margin-bottom:10px;}
 .tag-row{display:flex; flex-wrap:wrap;}
 .tag{font-family:var(--mono); font-size:11px; color:var(--gold-bright); border:1px solid var(--gold-dim); border-radius:100px; padding:4px 12px; margin-right:8px; margin-bottom:8px;}
@@ -247,10 +246,11 @@ h2{font-family:var(--serif); font-weight:600; font-size:42px; letter-spacing:-0.
 .ticket{
   flex:1 1 45%; min-width:300px; margin-right:28px; margin-bottom:28px;
   background:var(--black-card); border:1px solid var(--line); border-radius:6px;
-  display:flex; position:relative; overflow:hidden;
+  position:relative; transition:border-color .2s ease;
 }
+.ticket:hover{border-color:var(--gold-dim);}
 .ticket:last-child{margin-right:0;}
-.ticket-main{flex:1; padding:34px;}
+.ticket-main{padding:34px;}
 .ticket-tag{
   font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--gold-bright); border:1px solid var(--gold-dim); padding:5px 12px; border-radius:100px;
@@ -261,28 +261,18 @@ h2{font-family:var(--serif); font-weight:600; font-size:42px; letter-spacing:-0.
 .ticket-list{list-style:none; font-size:14px; color:var(--paper-dim);}
 .ticket-list li{padding-left:20px; position:relative; margin-bottom:9px;}
 .ticket-list li::before{content:'—'; position:absolute; left:0; color:var(--gold);}
-.ticket-stub{
-  width:40px; flex-shrink:0; border-left:1px dashed var(--line);
-  position:relative;
-}
-.ticket-stub::before, .ticket-stub::after{
-  content:''; position:absolute; left:-8px; width:16px; height:16px; border-radius:50%; background:var(--black);
-  border:1px solid var(--line);
-}
-.ticket-stub::before{top:-8px;}
-.ticket-stub::after{bottom:-8px;}
 
 .chip-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;}
 .chip-pending{
   display:inline-flex; align-items:center; gap:7px;
   font-family:var(--mono); font-size:10.5px; letter-spacing:.03em; color:var(--paper-faint);
-  border:1px dashed var(--line); border-radius:100px; padding:6px 13px 6px 10px;
+  border:1px solid var(--line); border-radius:100px; padding:6px 13px 6px 10px;
 }
 .chip-pending svg{width:15px; height:15px; color:var(--gold-dim); flex-shrink:0;}
 
 .foot-social{display:flex; align-items:center; gap:10px;}
 .foot-social-icon{
-  width:30px; height:30px; border:1px dashed var(--line); border-radius:50%;
+  width:30px; height:30px; border:1px solid var(--line); border-radius:50%;
   display:flex; align-items:center; justify-content:center; color:var(--gold-dim);
   transition:border-color .2s, color .2s;
 }
@@ -680,9 +670,8 @@ footer .wrap{display:flex; justify-content:space-between; align-items:center; fl
             <li><strong style="color:var(--paper);">Stage II</strong> — live competition, Oct 16 (time tentative)</li>
             <li>Ranked on a public leaderboard</li>
           </ul>
-          <p style="margin-top:16px; font-size:13.5px; color:var(--gold-bright); font-style:italic;">We encourage you to bring your own agent — it makes for more off-the-rails, unpredictable gameplay.</p>
+          <p style="margin-top:16px; font-size:13.5px; color:var(--gold-bright);">Building your own agent is encouraged — custom strategies produce the most competitive matches.</p>
         </div>
-        <div class="ticket-stub"></div>
       </div>
       <div class="ticket">
         <div class="ticket-main">
@@ -712,7 +701,6 @@ footer .wrap{display:flex; justify-content:space-between; align-items:center; fl
             </span>
           </div>
         </div>
-        <div class="ticket-stub"></div>
       </div>
     </div>
   </div>
@@ -935,25 +923,6 @@ footer .wrap{display:flex; justify-content:space-between; align-items:center; fl
   }
   tick();
   setInterval(tick, 1000);
-})();
-
-(function(){
-  // Subtle pointer-follow tilt on game cards. Skipped for touch and reduced-motion.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (window.matchMedia('(hover: none)').matches) return;
-  document.querySelectorAll('.game-card').forEach(function(card){
-    card.addEventListener('mousemove', function(e){
-      var rect = card.getBoundingClientRect();
-      var x = (e.clientX - rect.left) / rect.width;
-      var y = (e.clientY - rect.top) / rect.height;
-      var rotateY = (x - 0.5) * 10;
-      var rotateX = (0.5 - y) * 10;
-      card.style.transform = 'perspective(900px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg)';
-    });
-    card.addEventListener('mouseleave', function(){
-      card.style.transform = '';
-    });
-  });
 })();
 </script>
 
